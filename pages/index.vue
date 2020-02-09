@@ -6,6 +6,7 @@ section.hero.is-fullheight: .hero-body: .container
 	section#input-container
 		b-field(position='is-centered')
 			b-input(
+				v-model='url'
 				type='url'
 				size='is-medium'
 				placeholder='Enter a URL to shorten'
@@ -17,6 +18,7 @@ section.hero.is-fullheight: .hero-body: .container
 					type='is-primary'
 					size='is-medium'
 					icon-left='arrow-collapse'
+					@click='shorten'
 				) Shorten
 		#code-container.columns.is-vcentered
 			.column.is-2: b-field
@@ -28,6 +30,7 @@ section.hero.is-fullheight: .hero-body: .container
 					leave-active-class='animated hinge'
 				): b-field(v-if='doesUseCode')
 					b-input(
+						v-model='code'
 						size='is-medium'
 						placeholder='URL code'
 						pattern='[a-z0-9_-]'
@@ -40,12 +43,41 @@ section.hero.is-fullheight: .hero-body: .container
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
+import shortenUrl from '@/lib/shortenUrl';
+
 @Component({
 	name: 'Home'
 })
 export default class Home extends Vue {
 	gitIOLink = 'https://git.io';
 	doesUseCode = true;
+	url = '';
+	code = '';
+
+	async shorten() {
+		const { url, code } = this;
+
+		if (!url) {
+			this.$buefy.toast.open({
+				message: 'Please enter URL.',
+				type: 'is-danger'
+			});
+
+			return;
+		}
+
+		try {
+			console.log(await shortenUrl(url, code));
+		} catch (err) {
+			console.error(err);
+
+			this.$buefy.toast.open({
+				message: err.toString(),
+				type: 'is-danger'
+			});
+		}
+
+	}
 }
 </script>
 
