@@ -1,0 +1,49 @@
+{
+  "name": "git.io",
+  "version": "0.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gluons/git.io.git"
+  },
+  "keywords": [
+    "git.io"
+  ],
+  "author": "Saran Tanpituckpong <sarunta@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gluons/git.io/issues"
+  },
+  "homepage": "https://github.com/gluons/git.io",
+  "prettier": "@gluons/prettier-config",
+  "dependencies": {
+    "@nuxtjs/axios": "^5.9.5",
+    "animate.css": "^3.7.2",
+    "buefy": "^0.8.10",
+    "nuxt": "^2.11.0",
+    "nuxt-buefy": "^0.3.21",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@gluons/prettier-config": "^2.0.1",
+    "@nuxt/typescript-build": "^0.5.6",
+    "@types/node": "10",
+    "@typescript-eslint/eslint-plugin": "^2.19.0",
+    "@typescript-eslint/parser": "^2.19.0",
+    "eslint": "^6.8.0",
+    "eslint-config-gluons": "^5.0.3",
+    "eslint-plugin-vue": "^6.1.2",
+    "node-sass": "^4.13.1",
+    "nuxt-property-decorator": "^2.5.0",
+    "prettier": "^1.19.1",
+    "pug": "^2.0.4",
+    "pug-plain-loader": "^1.0.0",
+    "sass-loader": "^8.0.2",
+    "typescript": "^3.7.5",
+    "vue-class-component": "^7.2.2"
+  }
+}
