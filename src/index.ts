@@ -11,7 +11,7 @@ const app = fastify({
 });
 const start = async () => {
 	try {
-		const address = await app.listen(port);
+		const address = await app.listen(port, '0.0.0.0');
 
 		app.log.info(`git.io proxy is running on ${address}`);
 	} catch (err) {
