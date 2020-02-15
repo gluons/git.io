@@ -3,8 +3,15 @@ import fastifyCORS from 'fastify-cors';
 
 import shortenUrl from './shortenUrl';
 
+type Body = {
+	url: string;
+	code?: string;
+};
+
 const isPrd = process.env.NODE_ENV === 'production';
 const port = process.env.PORT ? parseInt(process.env.PORT) : 8888;
+const typeText = 'text/plain; charset=utf-8';
+const typeJson = 'application/json; charset=utf-8';
 
 const app = fastify({
 	logger: !isPrd ? { prettyPrint: true } : void 0
@@ -30,18 +37,28 @@ app.route({
 	handler(_, reply) {
 		reply
 			.status(405)
-			.header('Content-Type', 'text/plain; charset=UTF-8')
+			.type(typeText)
 			.send('Method Not Allowed');
 	}
 });
 
 app.post('/', async (request, reply) => {
 	const { body } = request;
+	const { url, code }: Body = body ?? {};
+
+	if (!url) {
+		reply
+			.status(400)
+			.type(typeText)
+			.send('No URL given.');
+
+		return;
+	}
 
 	try {
-		reply.header('Content-Type', 'application/json; charset=utf-8');
+		reply.type(typeJson);
 
-		const shortUrl = await shortenUrl(body?.url, body?.code);
+		const shortUrl = await shortenUrl(url, code);
 
 		if (!shortUrl) {
 			reply.status(204).send({
@@ -56,8 +73,8 @@ app.post('/', async (request, reply) => {
 		});
 	} catch (err) {
 		reply
-			.header('Content-Type', 'text/plain; charset=utf-8')
 			.status(500)
+			.type(typeText)
 			.send(err.toString());
 	}
 });

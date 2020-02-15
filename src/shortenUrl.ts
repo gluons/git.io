@@ -3,10 +3,6 @@ import got from 'got';
 import Payload from './types/Payload';
 
 export default async function shortenUrl(url: string, code?: string): Promise<string> {
-	if (!url) {
-		throw new Error('No URL given.');
-	}
-
 	const payload: Payload = {
 		url
 	};
