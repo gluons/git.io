@@ -63,6 +63,14 @@ import { Watch } from 'nuxt-property-decorator';
 
 import shortenUrl from '@/lib/shortenUrl';
 
+const trimError = (errMsg: string): string => {
+	if (errMsg.startsWith('Error:')) {
+		return errMsg.replace(/^Error:/, '').trim();
+	}
+
+	return errMsg;
+};
+
 @Component({
 	name: 'Home'
 })
@@ -107,7 +115,7 @@ export default class Home extends Vue {
 			console.error(err);
 
 			this.$buefy.toast.open({
-				message: err.toString(),
+				message: trimError(err.toString()),
 				type: 'is-danger'
 			});
 		} finally {
