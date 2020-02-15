@@ -33,7 +33,7 @@ section.hero.is-fullheight: .hero-body: .container
 						v-model='code'
 						size='is-medium'
 						placeholder='URL code'
-						pattern='[a-z0-9_-]'
+						pattern='[a-zA-Z0-9_-]*'
 						validation-message='Please enter valid URL code.'
 					)
 
@@ -42,6 +42,7 @@ section.hero.is-fullheight: .hero-body: .container
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import { Watch } from 'nuxt-property-decorator';
 
 import shortenUrl from '@/lib/shortenUrl';
 
@@ -55,7 +56,7 @@ export default class Home extends Vue {
 	code = '';
 
 	async shorten() {
-		const { url, code } = this;
+		const { url, code, doesUseCode } = this;
 
 		if (!url) {
 			this.$buefy.toast.open({
@@ -67,7 +68,7 @@ export default class Home extends Vue {
 		}
 
 		try {
-			console.log(await shortenUrl(url, code));
+			console.log(await shortenUrl(url, doesUseCode ? code : void 0));
 		} catch (err) {
 			console.error(err);
 
@@ -76,7 +77,14 @@ export default class Home extends Vue {
 				type: 'is-danger'
 			});
 		}
+	}
 
+	@Watch('doesUseCode')
+	onDoesUseCodeChange(newValue: boolean) {
+		// Clear code when disable "Use code"
+		if (!newValue) {
+			this.code = '';
+		}
 	}
 }
 </script>
