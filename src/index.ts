@@ -1,4 +1,5 @@
 import fastify from 'fastify';
+import fastifyCORS from 'fastify-cors';
 
 import shortenUrl from './shortenUrl';
 
@@ -19,6 +20,10 @@ const start = async () => {
 	}
 };
 
+app.register(fastifyCORS, {
+	origin: '*'
+});
+
 app.route({
 	method: ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'PUT'],
 	url: '/',
@@ -32,8 +37,6 @@ app.route({
 
 app.post('/', async (request, reply) => {
 	const { body } = request;
-
-	reply.header('Access-Control-Allow-Origin', '*');
 
 	try {
 		reply.header('Content-Type', 'application/json; charset=utf-8');
