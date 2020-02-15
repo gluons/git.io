@@ -1,5 +1,6 @@
 import fastify from 'fastify';
 import fastifyCORS from 'fastify-cors';
+import { HTTPError } from 'got';
 
 import shortenUrl from './shortenUrl';
 
@@ -10,8 +11,6 @@ type Body = {
 
 const isPrd = process.env.NODE_ENV === 'production';
 const port = process.env.PORT ? parseInt(process.env.PORT) : 8888;
-const typeText = 'text/plain; charset=utf-8';
-const typeJson = 'application/json; charset=utf-8';
 
 const app = fastify({
 	logger: !isPrd ? { prettyPrint: true } : void 0
@@ -35,10 +34,9 @@ app.route({
 	method: ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'PUT'],
 	url: '/',
 	handler(_, reply) {
-		reply
-			.status(405)
-			.type(typeText)
-			.send('Method Not Allowed');
+		reply.status(405).send({
+			error: 'Method Not Allowed'
+		});
 	}
 });
 
@@ -46,18 +44,17 @@ app.post('/', async (request, reply) => {
 	const { body } = request;
 	const { url, code }: Body = body ?? {};
 
+	reply.type('application/json; charset=utf-8');
+
 	if (!url) {
-		reply
-			.status(400)
-			.type(typeText)
-			.send('No URL given.');
+		reply.status(400).send({
+			error: 'No URL given.'
+		});
 
 		return;
 	}
 
 	try {
-		reply.type(typeJson);
-
 		const shortUrl = await shortenUrl(url, code);
 
 		if (!shortUrl) {
@@ -72,10 +69,21 @@ app.post('/', async (request, reply) => {
 			shortUrl
 		});
 	} catch (err) {
-		reply
-			.status(500)
-			.type(typeText)
-			.send(err.toString());
+		if (err instanceof HTTPError) {
+			const { response } = err;
+			const { statusCode, statusMessage } = response;
+
+			reply.status(statusCode).send({
+				error: statusMessage
+			});
+		}
+
+		const errMessage =
+			typeof err?.message === 'string' ? err.message : err.toString();
+
+		reply.status(500).send({
+			error: errMessage
+		});
 	}
 });
 
