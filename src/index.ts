@@ -3,7 +3,7 @@ import fastify from 'fastify';
 import shortenUrl from './shortenUrl';
 
 const isPrd = process.env.NODE_ENV === 'production';
-const port = isPrd ? 80 : 8888;
+const port = process.env.PORT ? parseInt(process.env.PORT) : 8888;
 
 const app = fastify({
 	logger: !isPrd ? { prettyPrint: true } : void 0
