@@ -41,7 +41,7 @@ app.post('/', async (request, reply) => {
 	try {
 		reply.header('Content-Type', 'application/json; charset=utf-8');
 
-		const shortUrl = await shortenUrl(body.url, body.code);
+		const shortUrl = await shortenUrl(body?.url, body?.code);
 
 		if (!shortUrl) {
 			reply.status(204).send({
