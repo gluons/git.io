@@ -1,0 +1,44 @@
+{
+  "name": "git.io-proxy",
+  "version": "0.0.0",
+  "engines": {
+    "node": "10"
+  },
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "predev": "npm run build",
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gluons/git.io.git"
+  },
+  "keywords": [
+    "git.io"
+  ],
+  "author": "Saran Tanpituckpong <sarunta@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gluons/git.io/issues"
+  },
+  "homepage": "https://github.com/gluons/git.io",
+  "prettier": "@gluons/prettier-config",
+  "dependencies": {
+    "fastify": "^2.12.0",
+    "got": "^10.5.5",
+    "pino": "^5.16.0",
+    "pino-pretty": "^3.6.0"
+  },
+  "devDependencies": {
+    "@gluons/prettier-config": "^2.0.1",
+    "@types/node": "10",
+    "concurrently": "^5.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-gluons": "^5.0.3",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.5"
+  }
+}

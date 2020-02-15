@@ -1,0 +1,6 @@
+{
+	"extends": "gluons/ts",
+	"parserOptions": {
+		"project": "tsconfig.json"
+	}
+}
