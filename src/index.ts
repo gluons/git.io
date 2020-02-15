@@ -56,7 +56,7 @@ app.post('/', async (request, reply) => {
 		});
 	} catch (err) {
 		reply
-			.header('Content-Type', 'text/plain; charset=UTF-8')
+			.header('Content-Type', 'text/plain; charset=utf-8')
 			.status(500)
 			.send(err.toString());
 	}
