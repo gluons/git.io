@@ -1,4 +1,7 @@
 module.exports = {
+	head: {
+		title: 'GIT.IO'
+	},
 	buildModules: ['@nuxt/typescript-build'],
 	modules: [
 		'@nuxtjs/axios',
