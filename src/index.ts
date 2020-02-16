@@ -3,12 +3,8 @@ import fastifyCORS from 'fastify-cors';
 import { HTTPError } from 'got';
 import { STATUS_CODES } from 'http';
 
+import Body from './types/Body';
 import shortenUrl from './shortenUrl';
-
-type Body = {
-	url: string;
-	code?: string;
-};
 
 const isPrd = process.env.NODE_ENV === 'production';
 const port = process.env.PORT ? parseInt(process.env.PORT) : 8888;
