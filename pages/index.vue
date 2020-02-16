@@ -13,6 +13,7 @@ section.hero.is-fullheight: .hero-body: .container
 				placeholder='Enter a GitHub URL to shorten'
 				expanded
 				autofocus
+				@keyup.enter.native='shorten'
 			)
 			p.control
 				b-button(
@@ -41,35 +42,32 @@ section.hero.is-fullheight: .hero-body: .container
 		name='code-transition'
 		enter-active-class='animated fadeIn'
 		leave-active-class='animated fadeOut'
-		:duration='400'
-	): #result-container.card.horizontal-margin(v-if='hasResult')
-		header.card-header: p.card-header-title Short URL
-		.card-content: #result.is-size-5
-			span {{shortUrl}}
-			b-tooltip(label='Copy to clipboard' type='is-info' position='is-top' animated)
-				b-icon(
-					icon='clipboard-text'
-					type='is-info'
-					size='is-medium'
-					@click.native='copyResult'
-				)
+		:duration='300'
+	)
+		b-message(
+			v-if='hasResult'
+			title='Short URL'
+			aria-close-label='Close'
+			@close='clearResult'
+		)#result-container.horizontal-margin
+			#result.is-size-5
+				span {{shortUrl}}
+				b-tooltip(label='Copy to clipboard' type='is-info' position='is-top' animated)
+					b-icon(
+						icon='clipboard-text'
+						type='is-info'
+						size='is-medium'
+						@click.native='copyResult'
+					)
 </template>
 
 <script lang="ts">
 import copy from 'copy-text-to-clipboard';
 import Vue from 'vue';
-import Component from 'vue-class-component';
+import Component from 'nuxt-class-component';
 import { Watch } from 'nuxt-property-decorator';
 
 import shortenUrl from '@/lib/shortenUrl';
-
-const trimError = (errMsg: string): string => {
-	if (errMsg.startsWith('Error:')) {
-		return errMsg.replace(/^Error:/, '').trim();
-	}
-
-	return errMsg;
-};
 
 @Component({
 	name: 'Home'
@@ -88,7 +86,7 @@ export default class Home extends Vue {
 	async shorten() {
 		const { url, code, doesUseCode } = this;
 
-		this.shortUrl = '';
+		this.clearResult();
 
 		if (!url) {
 			this.$buefy.toast.open({
@@ -111,16 +109,19 @@ export default class Home extends Vue {
 			const shortUrl = await shortenUrl(url, doesUseCode ? code : void 0);
 
 			this.shortUrl = shortUrl;
-		} catch (err) {
-			console.error(err);
+		} catch (e) {
+			const err: Error = e;
 
 			this.$buefy.toast.open({
-				message: trimError(err.toString()),
+				message: err.message,
 				type: 'is-danger'
 			});
 		} finally {
 			loadingComponent.close();
 		}
+	}
+	clearResult() {
+		this.shortUrl = '';
 	}
 	copyResult() {
 		const { shortUrl } = this;
