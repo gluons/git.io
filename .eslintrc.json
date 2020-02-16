@@ -13,5 +13,8 @@
 		"parser": "@typescript-eslint/parser",
 		"project": ["tsconfig.json"],
 		"extraFileExtensions": [".vue"]
+	},
+	"rules": {
+		"semi": "off"
 	}
 }
