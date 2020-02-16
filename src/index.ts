@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import fastifyCORS from 'fastify-cors';
 import { HTTPError } from 'got';
+import { STATUS_CODES } from 'http';
 
 import shortenUrl from './shortenUrl';
 
@@ -35,7 +36,7 @@ app.route({
 	url: '/',
 	handler(_, reply) {
 		reply.status(405).send({
-			error: 'Method Not Allowed'
+			error: STATUS_CODES[405]
 		});
 	}
 });
@@ -71,18 +72,30 @@ app.post('/', async (request, reply) => {
 	} catch (err) {
 		if (err instanceof HTTPError) {
 			const { response } = err;
-			const { statusCode, statusMessage } = response;
+			const { body, statusCode, statusMessage } = response;
+
+			let errMsg = statusMessage;
+
+			if (
+				statusCode === 422 &&
+				typeof body === 'string' &&
+				body.length > 0
+			) {
+				errMsg = body;
+			}
 
 			reply.status(statusCode).send({
-				error: statusMessage
+				error: errMsg
 			});
+
+			return;
 		}
 
-		const errMessage =
+		const errMsg =
 			typeof err?.message === 'string' ? err.message : err.toString();
 
 		reply.status(500).send({
-			error: errMessage
+			error: errMsg
 		});
 	}
 });
