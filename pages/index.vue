@@ -16,6 +16,14 @@ section.hero.is-fullheight: .hero-body: .container
 				@keyup.enter.native='shorten'
 			)
 			p.control
+				b-tooltip(label='Clear inputs' type='is-danger' position='is-top' animated)
+					b-button(
+						type='is-danger'
+						size='is-medium'
+						icon-right='close'
+						@click='clearAll'
+					)
+			p.control
 				b-button(
 					type='is-primary'
 					size='is-medium'
@@ -47,6 +55,7 @@ section.hero.is-fullheight: .hero-body: .container
 		b-message(
 			v-if='hasResult'
 			title='Short URL'
+			type='is-success'
 			aria-close-label='Close'
 			@close='clearResult'
 		)#result-container.horizontal-margin
@@ -119,6 +128,12 @@ export default class Home extends Vue {
 		} finally {
 			loadingComponent.close();
 		}
+	}
+	clearAll() {
+		this.url = '';
+		this.code = '';
+
+		this.clearResult();
 	}
 	clearResult() {
 		this.shortUrl = '';
