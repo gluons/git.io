@@ -1,7 +1,7 @@
 {
   "name": "git.io",
   "version": "0.0.0",
-  "description": "",
+  "description": "Shorten GitHub URL with your own code via git.io.",
   "private": true,
   "scripts": {
     "dev": "nuxt",
