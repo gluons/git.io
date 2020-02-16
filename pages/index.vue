@@ -45,6 +45,7 @@ section.hero.is-fullheight: .hero-body: .container
 						placeholder='URL code'
 						pattern='[a-zA-Z0-9_-]*'
 						validation-message='Please enter valid URL code.'
+						@keyup.enter.native='shorten'
 					)
 	transition(
 		name='code-transition'
