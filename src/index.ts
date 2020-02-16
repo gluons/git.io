@@ -19,8 +19,9 @@ const app = fastify({
 const start = async () => {
 	try {
 		const address = await app.listen(port, '0.0.0.0');
+		const actualAddress = !isPrd ? `http://localhost:${port}` : address;
 
-		app.log.info(`git.io proxy is running on ${address}`);
+		app.log.info(`git.io proxy is running on ${actualAddress}`);
 	} catch (err) {
 		app.log.error(err);
 		process.exit(1);
@@ -28,7 +29,8 @@ const start = async () => {
 };
 
 app.register(fastifyCORS, {
-	origin: '*'
+	origin: 'https://git-io.netlify.com',
+	methods: ['POST']
 });
 
 app.route({
