@@ -4,7 +4,8 @@
   "description": "",
   "private": true,
   "scripts": {
-    "dev": "nuxt"
+    "dev": "nuxt",
+    "build": "nuxt generate"
   },
   "repository": {
     "type": "git",
