@@ -1,12 +1,8 @@
 import axios, { AxiosError } from 'axios';
 
-type Payload = {
-	url: string;
-	code?: string;
-};
-type Result = {
-	shortUrl: string;
-};
+import ErrorResult from '@/types/ErrorResult';
+import Payload from '@/types/Payload';
+import Result from '@/types/Result';
 
 const proxyUrl = 'https://git-io-proxy.herokuapp.com/';
 
@@ -27,27 +23,24 @@ export default async function shortenUrl(
 	}
 
 	try {
-		const res = await axios.post<Result | string>(proxyUrl, payload);
-		const { data, status } = res;
+		const res = await axios.post<Result>(proxyUrl, payload);
+		const { data } = res;
 
-		if (status !== 200) {
-			throw new Error(data.toString());
+		const { shortUrl } = data;
+
+		if (!shortUrl) {
+			throw new Error('No result.');
 		}
-
-		const { shortUrl } = data as Result;
 
 		return shortUrl;
 	} catch (err) {
-		const { response } = err as AxiosError;
+		const { response } = err as AxiosError<ErrorResult>;
 
 		if (response) {
-			const { status, data } = response;
-			const errMsg =
-				typeof data?.error === 'string' ? data.error : data.toString();
+			const { data } = response;
+			const errMsg = data.error ?? data.toString();
 
-			console.log(errMsg);
-
-			throw new Error(`Error (HTTP ${status}): ${errMsg}`);
+			throw new Error(errMsg);
 		}
 
 		throw err;
