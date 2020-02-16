@@ -1,6 +1,13 @@
 module.exports = {
 	head: {
-		title: 'GIT.IO'
+		title: 'GIT.IO',
+		meta: [
+			{ charset: 'utf-8' },
+			{
+				name: 'viewport',
+				content: 'width=device-width, initial-scale=1'
+			}
+		]
 	},
 	buildModules: ['@nuxt/typescript-build'],
 	modules: [
@@ -12,8 +19,5 @@ module.exports = {
 			}
 		]
 	],
-	css: [
-		'animate.css',
-		'@/scss/main.scss'
-	]
+	css: ['animate.css', '@/scss/main.scss']
 };
